@@ -68,4 +68,9 @@ class Welcome extends Component
             'headers' => $this->headers(),
         ]);
     }
+
+    //    public function mount(): void
+    //    {
+    //        Redis::connection('cache')->set('another_key', 'another_value');
+    //    }
 }
