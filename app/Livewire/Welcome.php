@@ -71,6 +71,17 @@ class Welcome extends Component
 
     //    public function mount(): void
     //    {
-    //        Redis::connection('cache')->set('another_key', 'another_value');
+    ////        $concert                  = new Teste();
+    ////        $concert->performer       = 'Mitsuko Uchida';
+    ////        $concert->venue           = 'Carnegie Hall';
+    ////        $concert->genres          = ['classical'];
+    ////        $concert->ticketsSold     = 2121;
+    ////        $concert->performanceDate = Carbon::create(2024, 4, 1, 20, 0, 0, 'EST');
+    ////        $concert->save();
+    ////
+    ////        $movies = Teste::where('ticketsSold', 2121)->get();
+    ////        dd($movies);
+    //
+    //        //        Redis::connection('cache')->set('another_key', 'another_value');
     //    }
 }
