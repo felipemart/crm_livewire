@@ -6,7 +6,7 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use App\Notifications\WecomeNotification;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
