@@ -87,5 +87,8 @@
                 "require_once"
             ]
         }
-    }
+    },
+    "exclude": [
+        "resources/views/vendor/*"
+    ]
 }

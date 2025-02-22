@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use App\Notifications\WecomeNotification;
 use Illuminate\View\View;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
@@ -44,6 +45,8 @@ class Register extends Component
         ]);
 
         auth()->login($user);
+
+        $user->notify(new WecomeNotification());
 
         $this->redirect(route('home'));
     }

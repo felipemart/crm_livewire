@@ -10,7 +10,13 @@ class Logout extends Component
 {
     public function render()
     {
-        return view('livewire.auth.logout')->laytout('components.layouts.guest');
+        return view('livewire.auth.logout')
+            ->layout('components.layouts.guest', ['title' => 'Register']);
+    }
+
+    public function mount(): void
+    {
+        $this->logout();
     }
 
     public function logout(): void
