@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -23,12 +25,12 @@ class Register extends Component
 
     public string $password_confirmation = '';
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.auth.register');
     }
 
-    public function submit()
+    public function submit(): RedirectResponse
     {
         $this->validate();
 
@@ -39,5 +41,7 @@ class Register extends Component
         ]);
 
         auth()->login($user);
+
+        return redirect()->route('home');
     }
 }
