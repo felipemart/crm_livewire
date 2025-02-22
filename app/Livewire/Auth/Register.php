@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace App\Livewire\Auth;
 
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
@@ -27,11 +26,15 @@ class Register extends Component
 
     public function render(): View
     {
-        return view('livewire.auth.register');
+        return view('livewire.auth.register')
+            ->layout('components.layouts.guest', ['title' => 'Register']);
     }
 
-    public function submit(): RedirectResponse
+    public function submit(): void
     {
+        auth()->logout();
+        session()->invalidate();
+        session()->regenerateToken();
         $this->validate();
 
         $user = User::create([
@@ -42,6 +45,6 @@ class Register extends Component
 
         auth()->login($user);
 
-        return redirect()->route('home');
+        $this->redirect(route('home'));
     }
 }
