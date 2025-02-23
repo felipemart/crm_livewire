@@ -9,7 +9,7 @@
 
         <x-slot:actions>
             <x-button label="Cancel"/>
-            <x-button label="Save!" class="btn-primary" type="submit" spinner="save"/>
+            <x-button label="Rigstrar" class="btn-primary" type="submit" spinner="save"/>
         </x-slot:actions>
     </x-form>
 

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 use App\Livewire\Auth\PasswordRecovery;
 use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
+use App\Notifications\PasswordRecoveryNotification;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 
@@ -24,12 +24,12 @@ it('should be able to request for a recover password', function () {
     $user = User::factory()->create();
 
     Livewire::test(PasswordRecovery::class)
-        ->assertDontSee(trans('message.Send Password Reset Link'))
+        ->assertDontSee('Enviamos por e-mail o link de redefinição de senha!')
         ->set('email', $user->email)
         ->call('recoverPassword')
-        ->assertSee(trans('message.Send Password Reset Link'));
+        ->assertSee('Enviamos por e-mail o link de redefinição de senha!');
 
-    Notification::assertSentTo($user, ResetPassword::class);
+    Notification::assertSentTo($user, PasswordRecoveryNotification::class);
 });
 
 it('making sure the email is a real email', function ($value, $rule) {

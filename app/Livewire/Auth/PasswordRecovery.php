@@ -28,6 +28,6 @@ class PasswordRecovery extends Component
 
         Password::sendResetLink($this->only('email'));
 
-        $this->message = trans('message.Send Password Reset Link');
+        $this->message = 'Enviamos por e-mail o link de redefinição de senha!';
     }
 }

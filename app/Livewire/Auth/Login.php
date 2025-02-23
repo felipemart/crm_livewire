@@ -24,7 +24,7 @@ class Login extends Component
     public function tryLogin(): void
     {
         if (RateLimiter::tooManyAttempts($this->throtttleKey(), 5)) {
-            $this->addError('rateLimiter', trans('auth.throttle', ['seconds' => RateLimiter::availableIn($this->throtttleKey())]));
+            $this->addError('rateLimiter', 'Muitas tentativas.  Por favor, tente novamente em ' . RateLimiter::availableIn($this->throtttleKey()) . ' segundos.');
 
             return;
         }

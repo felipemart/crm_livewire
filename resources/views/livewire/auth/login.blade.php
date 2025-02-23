@@ -30,10 +30,10 @@
                 <div class="w-full flex items-center justify-between">
                     <div>
                         <a wire:navigate href="{{ route('register') }}"
-                           class="link link-primary"> {{ trans('message.create a account') }}</a>
+                           class="link link-primary"> Criar conta </a>
                         <br/>
                         <a wire:navigate href="{{ route('password.recovery') }}"
-                           class="link link-primary"> {{ trans('message.Forgot your password?') }}</a>
+                           class="link link-primary"> Recuperar senha </a>
                     </div>
                     <div class="space-x-3">
                         <x-button label="Cancelar" type="reset"/>
