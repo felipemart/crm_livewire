@@ -18,3 +18,4 @@ Route::get('/register', Register::class)->name('register');
 Route::get('/logout', Logout::class)->name('logout');
 
 Route::get('/password-recovery', PasswordRecovery::class)->name('password.recovery');
+Route::get('password/reset', fn () => 'oi')->name('password.reset');
