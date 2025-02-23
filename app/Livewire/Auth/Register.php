@@ -7,6 +7,7 @@ namespace App\Livewire\Auth;
 use App\Models\User;
 use App\Notifications\WecomeNotification;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -25,10 +26,10 @@ class Register extends Component
 
     public string $password_confirmation = '';
 
+    #[Layout('components.layouts.guest', ['title' => 'Criar Conta'])]
     public function render(): View
     {
-        return view('livewire.auth.register')
-            ->layout('components.layouts.guest', ['title' => 'Register']);
+        return view('livewire.auth.register');
     }
 
     public function submit(): void

@@ -5,6 +5,7 @@ declare(strict_types = 1);
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Logout;
 use App\Livewire\Auth\PasswordRecovery;
+use App\Livewire\Auth\PasswordReset;
 use App\Livewire\Auth\Register;
 use App\Livewire\Welcome;
 use Illuminate\Support\Facades\Route;
@@ -18,4 +19,4 @@ Route::get('/register', Register::class)->name('register');
 Route::get('/logout', Logout::class)->name('logout');
 
 Route::get('/password-recovery', PasswordRecovery::class)->name('password.recovery');
-Route::get('password/reset', fn () => 'oi')->name('password.reset');
+Route::get('password/reset', PasswordReset::class)->name('password.reset');

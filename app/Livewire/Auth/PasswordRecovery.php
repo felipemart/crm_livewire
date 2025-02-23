@@ -6,6 +6,7 @@ namespace App\Livewire\Auth;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Password;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -16,10 +17,10 @@ class PasswordRecovery extends Component
 
     public string $message = '';
 
+    #[Layout('components.layouts.guest', ['title' => 'Recuperar Senha'])]
     public function render(): View
     {
-        return view('livewire.auth.password-recovery')
-            ->layout('components.layouts.guest', ['title' => 'Login']);
+        return view('livewire.auth.password-recovery');
     }
 
     public function recoverPassword(): void

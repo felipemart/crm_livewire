@@ -1,29 +1,29 @@
 <x-card title="Login" shadow class="mx-auto w-[500px]">
+    @if(session()->has('status'))
+        <x-alert icon="o-exclamation-triangle" class="alert-warning">
+            <span>{{ session()->get('status') }}</span>
+        </x-alert>
+    @endif
 
+    @if($errors->hasAny(['invalidCredentials', 'rateLimiter']))
+        <x-alert icon="o-exclamation-triangle" class="alert-warning">
 
-    <x-form wire:submit="tryLogin">
+            @error('invalidCredentials')
+            <span>{{ $message }}</span>
+            @enderror
+            @error('rateLimiter')
+            <span>{{ $message }}</span>
+            @enderror
+
+        </x-alert>
+
+    @endif
+
+    <x-form wire:submit="tryLogin" class="mt-4">
         <x-input label="Email" wire:model="email"/>
         <x-input label="Password" wire:model="password" type="password"/>
 
-        @if(session()->has('status'))
-            <x-alert icon="o-exclamation-triangle" class="alert-warning">
-                <span>{{ session()->get('status') }}</span>
-            </x-alert>
-        @endif
 
-        @if($errors->hasAny(['invalidCredentials', 'rateLimiter']))
-            <x-alert icon="o-exclamation-triangle" class="alert-warning">
-
-                @error('invalidCredentials')
-                <span>{{ $message }}</span>
-                @enderror
-                @error('rateLimiter')
-                <span>{{ $message }}</span>
-                @enderror
-
-            </x-alert>
-
-        @endif
         <div class="w-full flex items-center justify-between">
 
             <x-slot:actions>
@@ -45,5 +45,4 @@
 
         </div>
     </x-form>
-
 </x-card>
