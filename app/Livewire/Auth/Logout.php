@@ -15,7 +15,7 @@ class Logout extends Component
             ->layout('components.layouts.guest', ['title' => 'Logout']);
     }
 
-    public function mount(): void
+    public function logout(): void
     {
         auth()->logout();
         session()->invalidate();

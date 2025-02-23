@@ -1,3 +1,3 @@
 <div>
-    {{-- The Master doesn't talk, he acts. --}}
+    <x-button icon="o-power" class="btn-circle btn-ghost btn-xs" wire:click="logout"/>
 </div>
