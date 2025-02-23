@@ -29,10 +29,10 @@
             <x-slot:actions>
                 <div class="w-full flex items-center justify-between">
                     <div>
-                        <a wire:navigate href="#"
+                        <a wire:navigate href="{{ route('register') }}"
                            class="link link-primary"> {{ trans('message.create a account') }}</a>
                         <br/>
-                        <a wire:navigate href="#"
+                        <a wire:navigate href="{{ route('password.recovery') }}"
                            class="link link-primary"> {{ trans('message.Forgot your password?') }}</a>
                     </div>
                     <div class="space-x-3">

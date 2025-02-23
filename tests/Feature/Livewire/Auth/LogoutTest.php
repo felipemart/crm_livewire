@@ -12,6 +12,7 @@ it('should be able to logout', function () {
     $user = User::factory()->create();
     actingAs($user);
     Livewire::test(Logout::class)
+        ->call('logout')
         ->assertRedirect(route('login'));
 
     expect(auth()->guest())->toBeTrue();
