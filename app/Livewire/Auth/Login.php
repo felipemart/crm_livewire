@@ -17,13 +17,14 @@ class Login extends Component
 
     public function render(): View
     {
-        return view('livewire.auth.login');
+        return view('livewire.auth.login')
+            ->layout('components.layouts.guest', ['title' => 'Login']);
     }
 
     public function tryLogin(): void
     {
         if (RateLimiter::tooManyAttempts($this->throtttleKey(), 5)) {
-            $this->addError('rateLimit', trans('auth.throttle', ['seconds' => RateLimiter::availableIn($this->throtttleKey())]));
+            $this->addError('rateLimiter', trans('auth.throttle', ['seconds' => RateLimiter::availableIn($this->throtttleKey())]));
 
             return;
         }

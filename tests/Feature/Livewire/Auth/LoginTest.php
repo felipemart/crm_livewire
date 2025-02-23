@@ -52,5 +52,5 @@ it('should make sure that the rate limit ', function () {
         ->set('email', $user->email)
         ->set('password', 'wrong-password')
         ->call('tryLogin')
-        ->assertHasErrors(['rateLimit']);
+        ->assertHasErrors(['rateLimiter']);
 });
