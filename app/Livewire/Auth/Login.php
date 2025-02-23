@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace App\Livewire\Auth;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Login extends Component
@@ -20,14 +22,26 @@ class Login extends Component
 
     public function tryLogin(): void
     {
-        if (! auth()->attempt([
-            'email'    => $this->email,
-            'password' => $this->password,
-        ])) {
+        if (RateLimiter::tooManyAttempts($this->throtttleKey(), 5)) {
+            $this->addError('rateLimit', trans('auth.throttle', ['seconds' => RateLimiter::availableIn($this->throtttleKey())]));
+
+            return;
+        }
+
+        if (! auth()->attempt(['email' => $this->email, 'password' => $this->password])) {
+            RateLimiter::hit($this->throtttleKey());
             $this->addError('invalidCredentials', trans('auth.failed'));
 
             return;
         }
         $this->redirect(route('home'));
+    }
+
+    /**
+     * @return string
+     */
+    private function throtttleKey(): string
+    {
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }
