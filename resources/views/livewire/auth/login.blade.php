@@ -16,16 +16,13 @@
             @enderror
 
         </x-alert>
-
     @endif
 
     <x-form wire:submit="tryLogin" class="mt-4">
         <x-input label="Email" wire:model="email"/>
         <x-input label="Password" wire:model="password" type="password"/>
 
-
         <div class="w-full flex items-center justify-between">
-
             <x-slot:actions>
                 <div class="w-full flex items-center justify-between">
                     <div>
@@ -41,8 +38,6 @@
                     </div>
                 </div>
             </x-slot:actions>
-
-
         </div>
     </x-form>
 </x-card>

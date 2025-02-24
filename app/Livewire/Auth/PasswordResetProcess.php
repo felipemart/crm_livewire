@@ -4,17 +4,26 @@ declare(strict_types = 1);
 
 namespace App\Livewire\Auth;
 
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-class PasswordReset extends Component
+class PasswordResetProcess extends Component
 {
     public string $token = '';
 
     public string $email = '';
+
+    public string $email_confirmation = '';
+
+    public string $password = '';
+
+    public string $password_confirmation = '';
 
     #[Layout('components.layouts.guest', ['title' => 'Recuperar Senha'])]
     public function render(): View
@@ -22,9 +31,10 @@ class PasswordReset extends Component
         return view('livewire.auth.password-reset');
     }
 
-    public function mount(): void
+    public function mount(?string $token = null, ?string $email = null): void
     {
-        $this->token = request('token', $this->token);
+        $this->token = request('token', $token);
+        $this->email = request('email', $email);
 
         if ($this->tokenInvalido()) {
             session()->flash('status', 'Token inválido.');
@@ -43,5 +53,17 @@ class PasswordReset extends Component
         }
 
         return true;
+    }
+
+    public function resetPassword(): void
+    {
+        Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
+            $user->password = $password;
+            $user->setRememberToken(Str::random(60));
+            $user->save();
+
+            event(new PasswordReset($user));
+        });
+        $this->redirectRoute('home');
     }
 }
