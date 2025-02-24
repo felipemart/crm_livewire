@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
@@ -56,6 +57,12 @@ class PasswordResetProcess extends Component
         }
 
         return true;
+    }
+
+    #[Computed]
+    public function obfuscatedEmail(): string
+    {
+        return obfucate_email($this->email);
     }
 
     public function resetPassword(): void

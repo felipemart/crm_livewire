@@ -95,3 +95,30 @@ test('checking form validation', function ($field, $value, $rule) {
     'password:confirmed' => ['field' => 'password', 'value' => 'any-password', 'rule' => 'confirmed'],
     'email:email'        => ['field' => 'email', 'value' => 'not-an-email', 'rule' => 'email'],
 ]);
+
+test('needs to show an obfuscated email', function () {
+    $email           = 'emailtest@example.com';
+    $obfuscatedEmail = obfucate_email($email);
+
+    expect($obfuscatedEmail)
+        ->toBe('emai*****@*******.com');
+
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    Livewire::test(PasswordRecovery::class)
+        ->set('email', $user->email)
+        ->call('recoverPassword');
+
+    Notification::assertSentTo(
+        $user,
+        PasswordRecoveryNotification::class,
+        function (PasswordRecoveryNotification $notification) use ($user) {
+            Livewire::test(PasswordResetProcess::class, ['token' => $notification->token, 'email' => $user->email])
+                ->assertSet('obfuscatedEmail', obfucate_email($user->email));
+
+            return true;
+        }
+    );
+});
