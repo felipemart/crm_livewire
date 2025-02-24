@@ -66,3 +66,32 @@ test('test if possible to reset password', function () {
         }
     );
 });
+
+test('checking form validation', function ($field, $value, $rule) {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    Livewire::test(PasswordRecovery::class)
+        ->set('email', $user->email)
+        ->call('recoverPassword');
+
+    Notification::assertSentTo(
+        $user,
+        PasswordRecoveryNotification::class,
+        function (PasswordRecoveryNotification $notification) use ($user, $field, $value, $rule) {
+            Livewire::test(PasswordResetProcess::class, ['token' => $notification->token, 'email' => $user->email])
+                ->set($field, $value)
+                ->call('resetPassword')
+                ->assertHasErrors([$field => $rule]);
+
+            return true;
+        }
+    );
+})->with([
+    'email:required'     => ['field' => 'email', 'value' => '', 'rule' => 'required'],
+    'password:required'  => ['field' => 'password', 'value' => '', 'rule' => 'required'],
+    'email:confirmed'    => ['field' => 'email', 'value' => 'joe@doe.com', 'rule' => 'confirmed'],
+    'password:confirmed' => ['field' => 'password', 'value' => 'any-password', 'rule' => 'confirmed'],
+    'email:email'        => ['field' => 'email', 'value' => 'not-an-email', 'rule' => 'email'],
+]);

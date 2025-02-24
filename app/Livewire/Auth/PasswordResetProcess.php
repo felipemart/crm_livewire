@@ -11,16 +11,19 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class PasswordResetProcess extends Component
 {
     public string $token = '';
 
+    #[Rule(['required', 'email', 'confirmed'])]
     public string $email = '';
 
     public string $email_confirmation = '';
 
+    #[Rule(['required', 'confirmed'])]
     public string $password = '';
 
     public string $password_confirmation = '';
@@ -57,6 +60,8 @@ class PasswordResetProcess extends Component
 
     public function resetPassword(): void
     {
+        $this->validate();
+
         Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
             $user->password = $password;
             $user->setRememberToken(Str::random(60));
