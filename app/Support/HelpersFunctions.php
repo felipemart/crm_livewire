@@ -2,9 +2,16 @@
 
 declare(strict_types = 1);
 
-function obfucate_email(string $email): string
+function obfucate_email(?string $email = null): string
 {
-    $splt   = explode('@', $email);
+    if (! $email) {
+        return '';
+    }
+    $splt = explode('@', $email);
+
+    if (sizeof($splt) != 2) {
+        return '';
+    }
     $name   = $splt[0];
     $domain = $splt[1];
 

@@ -17,17 +17,17 @@ use Livewire\Component;
 
 class PasswordResetProcess extends Component
 {
-    public string $token = '';
+    public ?string $token = null;
 
     #[Rule(['required', 'email', 'confirmed'])]
-    public string $email = '';
+    public ?string $email = null;
 
-    public string $email_confirmation = '';
+    public ?string $email_confirmation = null;
 
     #[Rule(['required', 'confirmed'])]
-    public string $password = '';
+    public ?string $password = null;
 
-    public string $password_confirmation = '';
+    public ?string $password_confirmation = null;
 
     #[Layout('components.layouts.guest', ['title' => 'Recuperar Senha'])]
     public function render(): View
@@ -69,13 +69,25 @@ class PasswordResetProcess extends Component
     {
         $this->validate();
 
-        Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
+        $status = Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
             $user->password = $password;
             $user->setRememberToken(Str::random(60));
             $user->save();
 
             event(new PasswordReset($user));
         });
+
+        if ($status != Password::PASSWORD_RESET) {
+            session()->flash('status', 'Ocorreu um erro ao resetar a senha.');
+
+            if ($status == Password::INVALID_USER) {
+                session()->flash('status', 'Não conseguimos encontrar um usuário com esse endereço de e-mail.');
+            }
+
+            return;
+        }
+
+        session()->flash('status', 'Senha resetada com sucesso.');
         $this->redirectRoute('home');
     }
 }
