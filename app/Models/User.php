@@ -8,6 +8,7 @@ namespace App\Models;
 use App\Notifications\PasswordRecoveryNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -54,5 +55,20 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token): void
     {
         $this->notify(new PasswordRecoveryNotification($token));
+    }
+
+    public function permissons(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function givePermission(string $key): void
+    {
+        $this->permissons()->firstOrCreate(['key' => $key]);
+    }
+
+    public function hasPermission(string $key): bool
+    {
+        return  $this->permissons()->where('key', '=', $key)->exists();
     }
 }
