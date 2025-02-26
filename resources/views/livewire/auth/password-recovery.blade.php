@@ -2,9 +2,9 @@
 
 
     <x-card title="Password Recovery" shadow class="mx-auto w-[500px]">
-
-
-        <x-form wire:submit="recoverPassword">
+        <span class="text-gray-600 dark:text-gray-400 text-sm">
+Insira o endereço de e-mail verificado da sua conta de usuário e enviaremos um link para redefinição de senha.</span>
+        <x-form wire:submit="recoverPassword" class="mt-4">
             <x-input label="Email" wire:model="email"/>
 
             @if(session()->has('status'))
@@ -24,6 +24,9 @@
                 <x-slot:actions>
                     <div class="w-full flex items-center justify-between">
                         <div>
+                            <a wire:navigate href="{{ route('login') }}"
+                               class="link link-primary"> Login </a>
+                            <br/>
                             <a wire:navigate href="{{ route('register') }}"
                                class="link link-primary"> Criar conta</a>
                             <br/>

@@ -20,20 +20,19 @@
 
     <x-form wire:submit="tryLogin" class="mt-4">
         <x-input label="Email" wire:model="email"/>
-        <x-input label="Password" wire:model="password" type="password"/>
+        <x-input label="Senha" wire:model="password" type="password"/>
 
         <div class="w-full flex items-center justify-between">
             <x-slot:actions>
                 <div class="w-full flex items-center justify-between">
                     <div>
                         <a wire:navigate href="{{ route('register') }}"
-                           class="link link-primary"> Criar conta </a>
+                           class="link link-primary"> Criar uma conta </a>
                         <br/>
                         <a wire:navigate href="{{ route('password.recovery') }}"
-                           class="link link-primary"> Recuperar senha </a>
+                           class="link link-primary"> Recuperar a senha </a>
                     </div>
                     <div class="space-x-3">
-                        <x-button label="Cancelar" type="reset"/>
                         <x-button label="Login" class="btn-primary" type="submit" spinner="save"/>
                     </div>
                 </div>

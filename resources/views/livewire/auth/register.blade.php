@@ -1,16 +1,27 @@
-<x-card title="Login" shadow class="mx-auto w-[400px]">
+<x-card title="Criação de conta" shadow class="mx-auto w-[500px]">
 
-    <x-form wire:submit="submit" no-separator>
-        <x-input label="Name" wire:model="name"/>
+    <x-form wire:submit="submit" class="mt-4">
+        <x-input label="Nome" wire:model="name"/>
         <x-input label="Email" wire:model="email"/>
-        <x-input label="Email Confirmation" wire:model="email_confirmation"/>
-        <x-input label="Password" wire:model="password" type="password"/>
-        <x-input label="Password Confirmation" wire:model="password_confirmation" type="password"/>
-
-        <x-slot:actions>
-            <x-button label="Cancel"/>
-            <x-button label="Rigstrar" class="btn-primary" type="submit" spinner="save"/>
-        </x-slot:actions>
+        <x-input label="Confirmação de email" wire:model="email_confirmation"/>
+        <x-input label="Senha" wire:model="password" type="password"/>
+        <x-input label="Confirmação de senha" wire:model="password_confirmation" type="password"/>
+        <div class="w-full flex items-center justify-between">
+            <x-slot:actions>
+                <div class="w-full flex items-center justify-between">
+                    <div>
+                        <a wire:navigate href="{{ route('login') }}"
+                           class="link link-primary"> Login </a>
+                        <br/>
+                        <a wire:navigate href="{{ route('password.recovery') }}"
+                           class="link link-primary"> Recuperar a senha </a>
+                    </div>
+                    <div class="space-x-3">
+                        <x-button label="Registar" class="btn-primary" type="submit" spinner="save"/>
+                    </div>
+                </div>
+            </x-slot:actions>
+        </div>
     </x-form>
 
 

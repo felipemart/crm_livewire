@@ -34,6 +34,11 @@ class Register extends Component
 
     public function submit(): void
     {
+        //TODO: Validar se o e-mail ja foi cadastrado
+        //TODO: remover o login automatico?
+        //TODO: refazer o email de boas vindas
+        //TODO: enviar email de verificação
+
         auth()->logout();
         session()->invalidate();
         session()->regenerateToken();
