@@ -34,10 +34,9 @@ class Register extends Component
 
     public function submit(): void
     {
-        //TODO: Validar se o e-mail ja foi cadastrado
         //TODO: remover o login automatico?
         //TODO: refazer o email de boas vindas
-        //TODO: enviar email de verificação
+        //TODO: refazer email de verificação
 
         auth()->logout();
         session()->invalidate();
@@ -53,6 +52,7 @@ class Register extends Component
         auth()->login($user);
 
         $user->notify(new WecomeNotification());
+        $user->sendEmailVerificationNotification();
 
         $this->redirect(route('home'));
     }
