@@ -6,21 +6,19 @@ namespace App\Models;
 
 use App\Notifications\PasswordRecoveryNotification;
 use App\Notifications\VerifyEmail;
+use App\Traits\HasPermissons;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
-use function session;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
     use Notifiable;
+    use HasPermissons;
 
     /**
      * The attributes that are mass assignable.
@@ -46,12 +44,6 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @return string
      */
-    private function getKeySession(): string
-    {
-        $k = "user:" . $this->id . ".permissions";
-
-        return $k;
-    }
 
     /**
      * Get the attributes that should be cast.
@@ -74,45 +66,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmail());
-    }
-
-    public function permissons(): BelongsToMany
-    {
-        return $this->belongsToMany(Permission::class);
-    }
-
-    public function givePermission(string $key): void
-    {
-        $this->permissons()->firstOrCreate(['key' => $key]);
-        $this->makeSessionPermissions();
-    }
-
-    public function hasPermission(string | array $key): bool
-    {
-        if (is_array($key)) {
-            foreach ($key as $k) {
-                if ($this->hasPermission($k)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        $k = $this->getKeySession();
-
-        if (! session()->has($k)) {
-            $this->makeSessionPermissions();
-        }
-        /** @var Collection $permissons */
-        $permissons = session()->get($k);
-
-        return  $permissons->where('key', '=', $key)->isNotEmpty();
-    }
-
-    public function makeSessionPermissions()
-    {
-        $k = $this->getKeySession();
-        session([$k => $this->permissons]);
     }
 }
