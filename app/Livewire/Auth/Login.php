@@ -36,6 +36,8 @@ class Login extends Component
 
             return;
         }
+        auth()->user()->makeSessionPermissions();
+
         $this->redirect(route('home'));
     }
 

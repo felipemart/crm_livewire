@@ -8,10 +8,13 @@ use App\Notifications\PasswordRecoveryNotification;
 use App\Notifications\VerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
+use function session;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -39,6 +42,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
+
+    /**
+     * @return string
+     */
+    private function getKeySession(): string
+    {
+        $k = "user:" . $this->id . ".permissions";
+
+        return $k;
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -71,6 +84,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function givePermission(string $key): void
     {
         $this->permissons()->firstOrCreate(['key' => $key]);
+        $this->makeSessionPermissions();
     }
 
     public function hasPermission(string | array $key): bool
@@ -85,6 +99,20 @@ class User extends Authenticatable implements MustVerifyEmail
             return false;
         }
 
-        return  $this->permissons()->where('key', '=', $key)->exists();
+        $k = $this->getKeySession();
+
+        if (! session()->has($k)) {
+            $this->makeSessionPermissions();
+        }
+        /** @var Collection $permissons */
+        $permissons = session()->get($k);
+
+        return  $permissons->where('key', '=', $key)->isNotEmpty();
+    }
+
+    public function makeSessionPermissions()
+    {
+        $k = $this->getKeySession();
+        session([$k => $this->permissons]);
     }
 }

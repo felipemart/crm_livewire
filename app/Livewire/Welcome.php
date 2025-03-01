@@ -63,7 +63,8 @@ class Welcome extends Component
 
     public function render()
     {
-        //        var_dump(session()->all());
+        //        auth()->user()->givePermission('admin222');
+        //        dd(session()->get('user:1.permissions'));
 
         return view('livewire.welcome', [
             'users'   => $this->users(),
