@@ -2,6 +2,7 @@
 
 declare(strict_types = 1);
 
+use App\Livewire\Admin\Dashboard;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Logout;
 use App\Livewire\Auth\PasswordRecovery;
@@ -33,5 +34,5 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::prefix('/admin')->middleware('permission:admin')->group(function () {
-    Route::get('/dashboard', fn () => 'Dashboard')->name('admin.dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
 });

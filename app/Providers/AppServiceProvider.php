@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //        Gate::define('admin', fn (User $user) => $user->hasPermission('admin'));
+        //    Gate::define('admin', fn (User $user) => $user->hasPermission('admin'));
     }
 
     public static function bladeMethodWrapper($method, $role, $guard = null): bool
