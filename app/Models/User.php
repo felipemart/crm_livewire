@@ -73,8 +73,18 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->permissons()->firstOrCreate(['key' => $key]);
     }
 
-    public function hasPermission(string $key): bool
+    public function hasPermission(string | array $key): bool
     {
+        if (is_array($key)) {
+            foreach ($key as $k) {
+                if ($this->hasPermission($k)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         return  $this->permissons()->where('key', '=', $key)->exists();
     }
 }

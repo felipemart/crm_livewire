@@ -31,3 +31,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
     return redirect('/home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::prefix('/admin')->middleware('permission:admin')->group(function () {
+    Route::get('/dashboard', fn () => 'Dashboard')->name('admin.dashboard');
+});
