@@ -11,7 +11,37 @@
                       tooltip-bottom="Cadastrar"/>
         </x-slot:actions>
     </x-header>
-    <x-table :headers="$this->headers" :rows="$this->users" class="w-11/12">
+    <x-drawer
+        wire:model="filtros"
+        title="Filtros"
+        separator
+        with-close-button
+        close-on-escape
+        class="w-11/12 lg:w-1/3"
+        right
+    >
+
+        <x-checkbox label="Buscar pelo usuarios excluidos" wire:model.live.debounce="search_trash"
+                    hint="Ative para buscar usuarios excluidos"/>
+        <x-input label="Nome" wire:model="nome" wire:model.live.debounce="nome"/>
+        <x-input label="Email" wire:model="email" wire:model.live.debounce="email"/>
+        <x-choices
+            label="Permissões"
+            wire:model.live.debounce="searchPermissions"
+            :options="$permissionsToSearch"
+            placeholder="Pesquisar ..."
+            search-function="filterPermissions"
+            no-result-text="Ops! Nenhum resultado ..."
+            option-label="key"
+            searchable/>
+
+
+        <x-slot:actions>
+            <x-button label="Filtar" class="btn-primary" icon="o-check" @click="$wire.filtros = false"/>
+        </x-slot:actions>
+    </x-drawer>
+    <x-table :headers="$this->headers" :rows="$this->users" class="w-11/12" with-pagination per-page="perPage"
+             :per-page-values="[3, 5, 10]" :sort-by="$sortBy">
         @scope('cell_permissions', $user)
         @foreach($user->permissions as $permission)
             <x-badge value="{{ $permission->key }}" class="badge-primary"/>
