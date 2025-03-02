@@ -15,7 +15,7 @@ class PermissionMiddleware
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next, $permisson): Response
+    public function handle(Request $request, Closure $next, string $permisson): Response
     {
         $permisson = explode('|', $permisson);
 
@@ -26,8 +26,14 @@ class PermissionMiddleware
         abort(403, 'Unauthorized action.');
     }
 
-    public static function checkPermission($method, $permisson, $guard = null): bool
+    /**
+     * @param string $method
+     * @param array<string> $permissons
+     * @param string|null $guard
+     * @return bool
+     */
+    public static function checkPermission(string $method, array $permissons, null | string $guard = null): bool
     {
-        return auth($guard)->check() && auth($guard)->user()->{$method}($permisson);
+        return auth($guard)->check() && auth($guard)->user()->{$method}($permissons);
     }
 }

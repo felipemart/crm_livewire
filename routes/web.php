@@ -8,6 +8,7 @@ use App\Livewire\Auth\Logout;
 use App\Livewire\Auth\PasswordRecovery;
 use App\Livewire\Auth\PasswordResetProcess;
 use App\Livewire\Auth\Register;
+use App\Livewire\User\Index;
 use App\Livewire\Welcome;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +36,5 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::prefix('/admin')->middleware('permission:admin')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
+    Route::get('/user/list', Index::class)->name('user.index');
 });

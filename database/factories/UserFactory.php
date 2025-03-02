@@ -51,4 +51,9 @@ class UserFactory extends Factory
             $user->givePermission($string);
         });
     }
+
+    public function admin(): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->givePermission('admin'));
+    }
 }
