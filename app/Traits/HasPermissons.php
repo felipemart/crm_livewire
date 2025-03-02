@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 trait HasPermissons
 {
-    public function permissons(): BelongsToMany
+    public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);
     }
@@ -24,7 +24,7 @@ trait HasPermissons
 
     public function givePermission(string $key): void
     {
-        $this->permissons()->firstOrCreate(['key' => $key]);
+        $this->permissions()->firstOrCreate(['key' => $key]);
         $this->makeSessionPermissions();
     }
 
@@ -60,6 +60,6 @@ trait HasPermissons
     public function makeSessionPermissions()
     {
         $k = $this->getKeySession();
-        session([$k => $this->permissons]);
+        session([$k => $this->permissions]);
     }
 }

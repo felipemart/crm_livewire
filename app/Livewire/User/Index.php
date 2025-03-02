@@ -12,6 +12,7 @@ use Livewire\Component;
 
 /**
  * @property-read LengthAwarePaginator|User[] $users
+ * @property-read  array $headers
  */
 class Index extends Component
 {
@@ -23,6 +24,17 @@ class Index extends Component
     #[Computed]
     public function users(): LengthAwarePaginator
     {
-        return User::paginate();
+        return User::with('permissions')->paginate();
+    }
+
+    #[Computed]
+    public function headers(): array
+    {
+        return [
+            ['key' => 'id', 'label' => '#'],
+            ['key' => 'name', 'label' => 'Nome'],
+            ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'permissions', 'label' => 'Permissões'],
+        ];
     }
 }

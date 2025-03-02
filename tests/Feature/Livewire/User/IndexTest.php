@@ -22,7 +22,8 @@ test('making sure that the route is protected by permission admin', function () 
 });
 
 test('let s create a livewire component  to list all users in the page', function () {
-    $users = User::factory()->count(15)->create();
+    actingAs(User::factory()->admin()->create());
+    $users = User::factory()->count(14)->create();
 
     $lw = Livewire::test(Index::class);
     $lw->assertSet('users', function ($users) {
@@ -36,4 +37,15 @@ test('let s create a livewire component  to list all users in the page', functio
     foreach ($users as $user) {
         $lw->assertSee($user->name);
     }
+});
+
+test('chack the table format', function () {
+    actingAs(User::factory()->admin()->create());
+    Livewire::test(Index::class)
+        ->assertSet('headers', [
+            ['key' => 'id', 'label' => '#'],
+            ['key' => 'name', 'label' => 'Nome'],
+            ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'permissions', 'label' => 'Permissões'],
+        ]);
 });
