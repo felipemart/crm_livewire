@@ -43,10 +43,12 @@
                 <x-menu-separator/>
             @endif
 
-            <x-menu-item title="Hello" icon="o-sparkles" link="/"/>
+            <x-menu-item title="Home" icon="o-sparkles" link="/"/>
+
             @haspermission('admin')
             <x-menu-sub title="Admin" icon="o-cog-6-tooth">
                 <x-menu-item title="Dashboard" icon="o-wifi" link="{{ route('admin.dashboard') }}"/>
+                <x-menu-item title="Users" icon="o-users" link="{{ route('user.index') }}"/>
             </x-menu-sub>
             @endhaspermission
         </x-menu>
