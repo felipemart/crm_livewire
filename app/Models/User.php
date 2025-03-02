@@ -6,7 +6,7 @@ namespace App\Models;
 
 use App\Notifications\PasswordRecoveryNotification;
 use App\Notifications\VerifyEmail;
-use App\Traits\HasPermissons;
+use App\Traits\HasPermissions;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,10 +15,13 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<UserFactory> */
+    /**
+     * @use HasFactory<UserFactory>
+     * @uses HasPermissions
+ */
     use HasFactory;
     use Notifiable;
-    use HasPermissons;
+    use HasPermissions;
 
     /**
      * The attributes that are mass assignable.

@@ -7,9 +7,12 @@ namespace App\Traits;
 use App\Models\Permission;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
-trait HasPermissons
+trait HasPermissions
 {
+    /** @return BelongsToMany<Permission, $this> */
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);
@@ -28,6 +31,12 @@ trait HasPermissons
         $this->makeSessionPermissions();
     }
 
+    /**
+     * @param string|array<string> $key
+     * @return bool
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function hasPermission(string | array $key): bool
     {
         if (is_array($key)) {
@@ -45,19 +54,23 @@ trait HasPermissons
         if (! session()->has($k)) {
             $this->makeSessionPermissions();
         }
-        /** @var Collection $permissons */
+        /** @var Collection<int, Permission> */
         $permissons = session()->get($k);
 
         return  $permissons->where('key', '=', $key)->isNotEmpty();
     }
 
+    /**
+     * @param string $key
+     * @return void
+     */
     public function revokePermission(string $key): void
     {
         $this->permissons()->where('key', '=', $key)->delete();
         $this->makeSessionPermissions();
     }
 
-    public function makeSessionPermissions()
+    public function makeSessionPermissions(): void
     {
         $k = $this->getKeySession();
         session([$k => $this->permissions]);

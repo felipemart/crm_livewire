@@ -49,3 +49,37 @@ test('chack the table format', function () {
             ['key' => 'permissions', 'label' => 'Permissões'],
         ]);
 });
+
+it('should be able to filter by name and email', function () {
+    $admin = User::factory()->admin()->create([
+        'name'  => 'John Doe',
+        'email' => 'john@example.com',
+    ]);
+
+    $noAdmin = User::factory()->create([
+        'name'  => 'Jane Doe',
+        'email' => 'jane@example.com',
+    ]);
+    actingAs($admin);
+
+    Livewire::test(Index::class)
+        ->assertSet('users', function ($users) {
+            expect($users)->toHaveCount(2);
+
+            return true;
+        })
+        ->set('search', 'John')
+        ->assertSet('users', function ($users) {
+            expect($users)->toHaveCount(1)
+                ->first()->name->toBe('John Doe');
+
+            return true;
+        })
+        ->set('search', 'jane@')
+        ->assertSet('users', function ($users) {
+            expect($users)->toHaveCount(1)
+                ->first()->name->toBe('Jane Doe');
+
+            return true;
+        });
+});

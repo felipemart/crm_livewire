@@ -27,7 +27,13 @@ class AppServiceProvider extends ServiceProvider
         //    Gate::define('admin', fn (User $user) => $user->hasPermission('admin'));
     }
 
-    public static function bladeMethodWrapper($method, $role, $guard = null): bool
+    /**
+     * @param $method<string>
+     * @param $role<string>
+     * @param $guard<string|null>
+     * @return bool
+     */
+    public static function bladeMethodWrapper(string $method, string $role, ?string $guard = null): bool
     {
         return auth($guard)->check() && auth($guard)->user()->{$method}($role);
     }
