@@ -13,6 +13,7 @@ use Livewire\Livewire;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\seed;
 
 it('should br able to give an useer a permission', function () {
@@ -100,4 +101,27 @@ test('lets make sure that we are using cache to store permissions', function () 
 
     $user->hasPermission('admin');
     expect(true)->toBeTrue();
+});
+
+test('revoke a permission user ', function () {
+    $user = User::factory()->create();
+    $user->givePermission('admin');
+
+    assertDatabaseHas('permissions', [
+        'key' => 'admin',
+    ]);
+    assertDatabaseHas('permission_user', [
+        'user_id'       => $user->id,
+        'permission_id' => Permission::where('key', '=', 'admin')->first()?->id,
+    ]);
+
+    $user->revokePermission('admin');
+    assertDatabaseMissing('permission_user', [
+        'user_id'       => $user->id,
+        'permission_id' => Permission::where('key', '=', 'admin')->first()?->id,
+    ]);
+
+    $sessionKey = "user:" . $user->id . ".permissions";
+    expect(Session::has($sessionKey))->toBeTrue('we should have a session key')
+        ->and(Session::get($sessionKey)->toArray())->toBe($user->permissons->toArray(), 'checking the session permissions');
 });

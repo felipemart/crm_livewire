@@ -51,6 +51,12 @@ trait HasPermissons
         return  $permissons->where('key', '=', $key)->isNotEmpty();
     }
 
+    public function revokePermission(string $key): void
+    {
+        $this->permissons()->where('key', '=', $key)->delete();
+        $this->makeSessionPermissions();
+    }
+
     public function makeSessionPermissions()
     {
         $k = $this->getKeySession();
